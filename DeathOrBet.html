@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🎲 BET OR DEATH - THỐNG KÊ TIỀN</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0f0c1f 0%, #1a1a2e 100%);
+            font-family: 'Segoe UI', 'Poppins', system-ui, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 16px;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            width: 100%;
+            background: #0d1117;
+            border-radius: 48px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 200, 100, 0.15);
+            overflow: hidden;
+            border: 1px solid #ffd966;
+        }
+
+        .game-header {
+            background: #000000aa;
+            backdrop-filter: blur(8px);
+            color: #ffd966;
+            padding: 12px 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #ffaa33;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .toggle-config-btn, .reset-stats-btn {
+            background: #ff8833;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.7rem;
+        }
+        .reset-stats-btn { background: #884422; }
+
+        .config-panel {
+            background: #1e1a2fcc;
+            margin: 12px;
+            padding: 12px;
+            border-radius: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+            border: 1px solid #ffaa55;
+            font-size: 0.7rem;
+        }
+        .config-panel.hidden { display: none; }
+
+        .config-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #00000066;
+            padding: 4px 10px;
+            border-radius: 60px;
+        }
+        .config-group label { font-weight: bold; color: #ffdd99; }
+        .config-group input {
+            width: 70px;
+            background: #2a2438;
+            border: 1px solid #ffaa55;
+            border-radius: 40px;
+            padding: 4px 6px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffecb3;
+        }
+        .apply-config {
+            background: #ff8833;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .stats-panel {
+            background: #16121fcc;
+            margin: 8px 12px;
+            padding: 10px;
+            border-radius: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .stat-card {
+            background: #00000066;
+            padding: 4px 12px;
+            border-radius: 60px;
+            font-weight: bold;
+            color: #ffecb3;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .health-bar-bg {
+            background: #4a1a1a;
+            border-radius: 40px;
+            height: 10px;
+            width: 100px;
+            overflow: hidden;
+        }
+        .health-fill { background: #e34d4d; width: 100%; height: 100%; transition: width 0.2s; }
+
+        .record-panel {
+            background: #1e1a2f;
+            margin: 8px 12px;
+            padding: 8px 12px;
+            border-radius: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #ffdd99;
+            border: 1px solid #ffaa55;
+        }
+        .record-item {
+            background: #00000044;
+            padding: 4px 10px;
+            border-radius: 60px;
+        }
+
+        .food-panel {
+            background: #1e1a2f;
+            margin: 8px 12px;
+            padding: 8px;
+            border-radius: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .food-option {
+            background: #2a2438;
+            border-radius: 60px;
+            padding: 6px 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            flex: 1;
+            min-width: 80px;
+            border: 1px solid #ffaa55;
+            color: #ffdd99;
+        }
+        .food-active { background: #ffaa33; color: #1a1a2e; border-color: white; }
+
+        .gamble-buttons {
+            background: #00000066;
+            margin: 8px 12px;
+            padding: 10px;
+            border-radius: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .gamble-type {
+            background: #3a2a1a;
+            border: none;
+            color: #ffdead;
+            padding: 6px 14px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        .loan-area {
+            background: #1f1b2c;
+            margin: 8px 12px;
+            padding: 12px;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .loan-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background: #000000;
+            padding: 8px;
+            border-radius: 32px;
+            font-size: 0.7rem;
+            color: #ffdd99;
+        }
+        .loan-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .loan-buttons button {
+            background: #ff8833;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .next-month {
+            background: #ff8833;
+            margin: 8px 12px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .simulate-skip {
+            background: #5a3a1a;
+            margin: 4px 12px 12px;
+            text-align: center;
+            padding: 8px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        .reset-btn {
+            background: #884422;
+            margin: 4px 12px 8px;
+            padding: 8px;
+            text-align: center;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+        .log-area {
+            background: #050505cc;
+            color: #c9f0c9;
+            margin: 12px;
+            padding: 10px;
+            border-radius: 32px;
+            height: 130px;
+            overflow-y: auto;
+            font-size: 0.68rem;
+            font-family: monospace;
+        }
+        footer {
+            font-size: 0.55rem;
+            text-align: center;
+            padding: 8px;
+            color: #aa9966;
+        }
+        .gamble-input {
+            background: #2a1f0f;
+            border: 1px solid #ffaa55;
+            border-radius: 60px;
+            padding: 6px 10px;
+            width: 85px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #1e1a2f;
+            border-radius: 48px;
+            padding: 24px;
+            text-align: center;
+            border: 2px solid #ffaa55;
+            max-width: 350px;
+            width: 90%;
+        }
+        .modal-content h3 { color: #ffd966; margin-bottom: 16px; }
+        .modal-content p { color: #ffecb3; margin-bottom: 20px; }
+        .modal-buttons { display: flex; gap: 15px; justify-content: center; }
+        .modal-buttons button { padding: 8px 20px; font-size: 1rem; }
+
+        @media (min-width: 900px) {
+            .stats-panel { flex-wrap: nowrap; }
+            .gamble-buttons { justify-content: space-around; }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="game-header">
+        🎲 BET OR DEATH - THỐNG KÊ TIỀN 🎲
+        <div>
+            <button id="toggleConfigBtn" class="toggle-config-btn">⚙️ Config</button>
+            <button id="resetStatsBtn" class="reset-stats-btn">🗑️ Xóa thống kê</button>
+        </div>
+    </div>
+
+    <!-- Bảng cấu hình (mặc định ẩn) -->
+    <div class="config-panel hidden" id="configPanel">
+        <div class="config-group"><label>💰 Lương/th</label><input type="number" id="cfgSalary" value="10" step="1"></div>
+        <div class="config-group"><label>🍱 Giá ăn</label><input type="text" id="cfgFoodCosts" value="2,4,6,9" style="width:100px"></div>
+        <div class="config-group"><label>❤️ Ảnh hưởng SK</label><input type="text" id="cfgHealthEffects" value="-10,-4,0,4" style="width:100px"></div>
+        <div class="config-group"><label>📈 Lạm phát %</label><input type="number" id="cfgInflation" value="1.5" step="0.5"></div>
+        <div class="config-group"><label>🏦 Lãi vay %/th</label><input type="number" id="cfgLoanRate" value="1.0" step="0.5"></div>
+        <div class="config-group"><label>💰 Tiền đầu</label><input type="number" id="cfgStartMoney" value="10" step="5"></div>
+        <div class="config-group"><label>💸 Nợ đầu</label><input type="number" id="cfgStartDebt" value="80" step="10"></div>
+        <div class="config-group"><label>❤️ Máu đầu</label><input type="number" id="cfgStartHealth" value="100" step="5"></div>
+        <button id="applyConfigBtn" class="apply-config">✅ ÁP DỤNG & RESET</button>
+    </div>
+
+    <!-- Bảng thống kê -->
+    <div class="record-panel" id="recordPanel">
+        <div class="record-item">🏆 Tháng cao nhất: <span id="highScore">0</span></div>
+        <div class="record-item">💰 Tổng đã cược: <span id="totalBetMoney">0</span> trđ</div>
+        <div class="record-item">🎉 Tổng thắng: <span id="totalWinMoney">0</span> trđ</div>
+        <div class="record-item">💸 Tổng thua: <span id="totalLoseMoney">0</span> trđ</div>
+        <div class="record-item">💎 Tài sản ròng max: <span id="maxNetWorth">0</span> trđ</div>
+    </div>
+
+    <div class="stats-panel">
+        <div class="stat-card">💰 Tiền mặt: <span id="moneyDisplay">0</span> trđ</div>
+        <div class="stat-card">❤️ <span id="healthDisplay">100</span>/<span id="maxHealthDisplay">100</span>
+            <div class="health-bar-bg"><div class="health-fill" id="healthFill" style="width:100%"></div></div>
+        </div>
+        <div class="stat-card">📆 Tháng: <span id="monthDisplay">1</span></div>
+        <div class="stat-card">💸 Tổng nợ: <span id="debtDisplay">0</span> trđ</div>
+        <div class="stat-card">📈 Lãi suất: <span id="rateDisplay">1.0</span>%</div>
+    </div>
+
+    <div class="food-panel" id="foodPanel">
+        <div data-food="0" class="food-option">🥬 Siêu TK<br><span id="foodCost0">-2tr</span><br><span id="foodEff0">-10💚</span></div>
+        <div data-food="1" class="food-option">🍚 TK<br><span id="foodCost1">-4tr</span><br><span id="foodEff1">-4💚</span></div>
+        <div data-food="2" class="food-option">🍛 Bình thường<br><span id="foodCost2">-6tr</span><br><span id="foodEff2">0💚</span></div>
+        <div data-food="3" class="food-option">🍖 Tốt<br><span id="foodCost3">-9tr</span><br><span id="foodEff3">+4💚</span></div>
+    </div>
+
+    <div class="gamble-buttons">
+        <button id="gambleRisky" class="gamble-type">⚖️ Risky Bet (50% x2)</button>
+        <button id="gambleHell" class="gamble-type">💀 All-in Hell (30% x3)</button>
+        <input type="number" id="betAmount" class="gamble-input" value="2" step="1">
+    </div>
+
+    <div class="loan-area">
+        <div class="loan-stats">
+            <span>🏦 Nợ gốc: <span id="debtPrincipalDisplay">0</span> trđ</span>
+            <span>📈 Lãi dồn: <span id="accruedInterestDisplay">0</span> trđ</span>
+            <span>⏰ Hạn trả: <span id="nextDebtMonth">6</span> tháng</span>
+        </div>
+        <div class="loan-buttons">
+            <button id="takeLoanBtn">💰 Vay thêm 10tr</button>
+            <button id="repayNowBtn">💸 Trả nợ sớm (gốc+lãi)</button>
+        </div>
+        <div style="font-size:0.65rem; color:#ffaa77;">⚠️ Mỗi 6 tháng phải trả hết nợ gốc + lãi dồn. Không trả → -30% máu + tăng lãi 2%</div>
+    </div>
+
+    <div class="next-month" id="nextMonthBtn">▶ Bước qua tháng (Event + Chi tiêu) ◀</div>
+    <div class="simulate-skip" id="autoSkipBtn">⚡ Auto đến chết (tính điểm)</div>
+    <div class="reset-btn" id="resetGameBtn">🔄 Reset Game (giữ cấu hình)</div>
+    <div class="log-area" id="logPanel"></div>
+    <footer>⚡ Event trừ máu theo % hiện tại. Risk: 50% x2 | Hell: 30% x3. Thống kê tiền cược/thắng/thua và tài sản ròng (tiền mặt - nợ).</footer>
+</div>
+
+<script>
+    // =============== CẤU HÌNH & THỐNG KÊ ===============
+    let dynamicConfig = {
+        salary: 10,
+        foodCosts: [2, 4, 6, 9],
+        foodHealth: [-10, -4, 0, 4],
+        inflation: 1.5,
+        baseInterest: 1.0,
+        startMoney: 10,
+        startDebt: 80,
+        startHealth: 100
+    };
+
+    // Thống kê (lưu localStorage)
+    let stats = {
+        highScore: 0,           // số tháng sống cao nhất
+        totalBetMoney: 0,       // tổng tiền đã cược
+        totalWinMoney: 0,       // tổng tiền thắng (lãi từ gamble)
+        totalLoseMoney: 0,      // tổng tiền thua (tiền đã mất)
+        maxNetWorth: 0          // tài sản ròng lớn nhất (tiền mặt - tổng nợ)
+    };
+
+    function getNetWorth() {
+        return money - (debtPrincipal + accruedInterest);
+    }
+
+    function updateMaxNetWorth() {
+        let net = getNetWorth();
+        if (net > stats.maxNetWorth) {
+            stats.maxNetWorth = net;
+            saveStats();
+        }
+    }
+
+    function loadStats() {
+        const saved = localStorage.getItem('betDeathStats');
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                stats.highScore = data.highScore || 0;
+                stats.totalBetMoney = data.totalBetMoney || 0;
+                stats.totalWinMoney = data.totalWinMoney || 0;
+                stats.totalLoseMoney = data.totalLoseMoney || 0;
+                stats.maxNetWorth = data.maxNetWorth || 0;
+            } catch(e) {}
+        }
+        updateStatsUI();
+    }
+
+    function saveStats() {
+        localStorage.setItem('betDeathStats', JSON.stringify(stats));
+        updateStatsUI();
+    }
+
+    function updateStatsUI() {
+        document.getElementById('highScore').textContent = stats.highScore;
+        document.getElementById('totalBetMoney').textContent = stats.totalBetMoney.toFixed(2);
+        document.getElementById('totalWinMoney').textContent = stats.totalWinMoney.toFixed(2);
+        document.getElementById('totalLoseMoney').textContent = stats.totalLoseMoney.toFixed(2);
+        document.getElementById('maxNetWorth').textContent = stats.maxNetWorth.toFixed(2);
+    }
+
+    function updateHighScore(months) {
+        if (months > stats.highScore) {
+            stats.highScore = months;
+            saveStats();
+        }
+    }
+
+    function addGambleRecord(betAmount, winAmount, loseAmount) {
+        // betAmount: số tiền đặt cược (đã cược)
+        // winAmount: số tiền lãi nếu thắng (0 nếu thua)
+        // loseAmount: số tiền mất nếu thua (0 nếu thắng)
+        stats.totalBetMoney += betAmount;
+        stats.totalWinMoney += winAmount;
+        stats.totalLoseMoney += loseAmount;
+        saveStats();
+    }
+
+    function resetStats() {
+        stats = { highScore: 0, totalBetMoney: 0, totalWinMoney: 0, totalLoseMoney: 0, maxNetWorth: 0 };
+        saveStats();
+        addLog(`🗑️ Đã xóa toàn bộ thống kê!`);
+    }
+
+    // Game state
+    let currentMonth = 1;
+    let money = 20;
+    let health = 100;
+    let maxHealth = 100;
+    let selectedFood = 2;
+    let debtPrincipal = 80;
+    let accruedInterest = 0;
+    let debtPunishStack = 0;
+    let currentInterestRate = 1.0;
+    let isGameOver = false;
+    let autoSkipRunning = false;
+
+    // DOM
+    const moneySpan = document.getElementById('moneyDisplay');
+    const healthSpan = document.getElementById('healthDisplay');
+    const maxHealthSpan = document.getElementById('maxHealthDisplay');
+    const monthSpan = document.getElementById('monthDisplay');
+    const debtSpan = document.getElementById('debtDisplay');
+    const debtPrincipalSpan = document.getElementById('debtPrincipalDisplay');
+    const accruedInterestSpan = document.getElementById('accruedInterestDisplay');
+    const nextDebtMonthSpan = document.getElementById('nextDebtMonth');
+    const rateDisplay = document.getElementById('rateDisplay');
+    const healthFill = document.getElementById('healthFill');
+    const logPanel = document.getElementById('logPanel');
+    const foodCostSpans = [document.getElementById('foodCost0'), document.getElementById('foodCost1'), document.getElementById('foodCost2'), document.getElementById('foodCost3')];
+    const foodEffSpans = [document.getElementById('foodEff0'), document.getElementById('foodEff1'), document.getElementById('foodEff2'), document.getElementById('foodEff3')];
+
+    function updateUI() {
+        moneySpan.textContent = money.toFixed(2);
+        healthSpan.textContent = Math.floor(health);
+        maxHealthSpan.textContent = maxHealth;
+        monthSpan.textContent = currentMonth;
+        let totalDebt = debtPrincipal + accruedInterest;
+        debtSpan.textContent = totalDebt.toFixed(2);
+        debtPrincipalSpan.textContent = debtPrincipal.toFixed(2);
+        accruedInterestSpan.textContent = accruedInterest.toFixed(2);
+        let monthsToNext = 6 - (currentMonth % 6);
+        if (currentMonth % 6 === 0) monthsToNext = 6;
+        nextDebtMonthSpan.textContent = monthsToNext;
+        let currentRate = currentInterestRate + debtPunishStack;
+        rateDisplay.textContent = currentRate.toFixed(1);
+        let percent = Math.min(100, Math.max(0, (health / maxHealth) * 100));
+        healthFill.style.width = `${percent}%`;
+        updateFoodDisplay();
+        // Cập nhật tài sản ròng max
+        updateMaxNetWorth();
+        if (health <= 0 && !isGameOver) gameOver();
+    }
+
+    function updateFoodDisplay() {
+        let mult = Math.pow(1 + dynamicConfig.inflation / 100, currentMonth - 1);
+        for (let i = 0; i < 4; i++) {
+            let cost = dynamicConfig.foodCosts[i] * mult;
+            foodCostSpans[i].innerHTML = `-${cost.toFixed(2)}tr`;
+            let eff = dynamicConfig.foodHealth[i];
+            foodEffSpans[i].innerHTML = `${eff >= 0 ? `+${eff}` : eff}💚`;
+        }
+    }
+
+    function getCurrentFoodCost() {
+        let mult = Math.pow(1 + dynamicConfig.inflation / 100, currentMonth - 1);
+        return dynamicConfig.foodCosts[selectedFood] * mult;
+    }
+    function getFoodHealthEffect() { return dynamicConfig.foodHealth[selectedFood]; }
+
+    function takePercentHealth(percent) {
+        let loss = Math.floor(health * percent / 100);
+        health -= loss;
+        return loss;
+    }
+
+    function addLog(msg) {
+        const p = document.createElement('div');
+        p.innerHTML = msg;
+        logPanel.appendChild(p);
+        logPanel.scrollTop = logPanel.scrollHeight;
+        while (logPanel.children.length > 50) logPanel.removeChild(logPanel.firstChild);
+    }
+
+    function showModal(title, message, onConfirm, onCancel) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3>${title}</h3>
+                <p>${message}</p>
+                <div class="modal-buttons">
+                    <button id="modalConfirmBtn" style="background:#ff8833;">✅ Chơi</button>
+                    <button id="modalCancelBtn" style="background:#5a3a1a;">❌ Bỏ qua</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.getElementById('modalConfirmBtn').onclick = () => { modal.remove(); if(onConfirm) onConfirm(); };
+        document.getElementById('modalCancelBtn').onclick = () => { modal.remove(); if(onCancel) onCancel(); };
+    }
+
+    async function triggerRandomEvent() {
+        return new Promise((resolve) => {
+            let r = Math.random();
+            if (r < 0.5) {
+                let sub = Math.random();
+                if (sub < 0.25) {
+                    let loss = takePercentHealth(15);
+                    addLog(`🤒 Ốm nặng: mất ${loss} máu (15% hiện tại)`);
+                    resolve({});
+                } else if (sub < 0.5) {
+                    money -= 10;
+                    addLog(`💸 Bị trộm: -10 triệu`);
+                    resolve({});
+                } else if (sub < 0.75) {
+                    addLog(`📉 Công ty cắt lương: tháng này chỉ nhận 50% lương!`);
+                    resolve({ salaryPenalty: 0.5 });
+                } else {
+                    if (selectedFood < 3) {
+                        let loss = takePercentHealth(10);
+                        addLog(`😡 Stress vì ăn uống kém: mất ${loss} máu (10% hiện tại)`);
+                    } else addLog(`😌 Vượt qua căng thẳng nhờ ăn tốt`);
+                    resolve({});
+                }
+            } else if (r < 0.8) {
+                let sub = Math.random();
+                if (sub < 0.33) { money += 10; addLog(`💰 Thưởng công ty: +10 triệu`); resolve({}); }
+                else if (sub < 0.66) { money += 8; let loss = takePercentHealth(5); addLog(`👨‍💼 Freelance: +8tr, mất ${loss} máu (5% hiện tại)`); resolve({}); }
+                else { addLog(`🍜 Được bao ăn: miễn phí thức ăn tháng này!`); resolve({ freeFood: true }); }
+            } else {
+                let sub = Math.random();
+                if (sub < 0.33) {
+                    addLog(`🧑 Bạn rủ gamble đặc biệt (x2.5 hoặc mất hết)!`);
+                    showModal("🎲 GAMBLE ĐẶC BIỆT", "Bạn có muốn chơi? Thắng x2.5, thua mất hết số tiền cược (tối đa 5tr)", 
+                        () => {
+                            let bet = Math.min(money, 5);
+                            if (bet > 0) {
+                                let win = Math.random() < 0.5;
+                                if (win) { 
+                                    let winAmount = bet * 1.5;
+                                    money += winAmount; 
+                                    addLog(`🎉 Thắng cược đặc biệt: +${winAmount.toFixed(2)}tr`);
+                                    addGambleRecord(bet, winAmount, 0);
+                                } else { 
+                                    money -= bet; 
+                                    addLog(`💀 Thua cược đặc biệt: mất ${bet.toFixed(2)}tr`);
+                                    addGambleRecord(bet, 0, bet);
+                                }
+                            }
+                            resolve({});
+                        },
+                        () => { addLog(`🚫 Từ chối gamble đặc biệt.`); resolve({}); }
+                    );
+                } else if (sub < 0.66) {
+                    let healPercent = Math.random() < 0.5 ? 20 : -15;
+                    let change = Math.floor(maxHealth * Math.abs(healPercent) / 100);
+                    if (healPercent > 0) { health = Math.min(maxHealth, health + change); addLog(`💊 Thuốc lạ: hồi +${change} máu (${healPercent}%)`); }
+                    else { health = Math.max(0, health - change); addLog(`💊 Thuốc độc: mất ${change} máu (${Math.abs(healPercent)}%)`); }
+                    resolve({});
+                } else {
+                    let rand = Math.random() * 20 - 5;
+                    money += rand;
+                    addLog(`🎁 Hộp bí ẩn: ${rand >= 0 ? `+${rand.toFixed(1)}` : `${rand.toFixed(1)}`} triệu`);
+                    resolve({});
+                }
+            }
+            health = Math.min(maxHealth, Math.max(0, health));
+        });
+    }
+
+    async function processMonth() {
+        if (isGameOver) return false;
+        addLog(`📅 === THÁNG ${currentMonth} ===`);
+        let salary = dynamicConfig.salary;
+        if (health < 30) { salary *= 0.8; addLog(`⚠️ Sức khỏe thấp (<30): Lương giảm 20%`); }
+        let healthBonus = (health > 80) ? 2 : 0;
+        money += salary + healthBonus;
+        addLog(`💰 Nhận lương: ${salary.toFixed(2)}tr + ${healthBonus > 0 ? healthBonus + "tr thưởng" : ""} → ${money.toFixed(2)}tr`);
+
+        let event = await triggerRandomEvent();
+        if (event.salaryPenalty) {
+            let cut = salary * 0.5;
+            money -= cut;
+            addLog(`📉 Lương bị cắt 50%: mất ${cut.toFixed(2)}tr`);
+        }
+        let freeFood = event.freeFood === true;
+
+        let foodCost = getCurrentFoodCost();
+        if (!freeFood) {
+            if (money >= foodCost) {
+                money -= foodCost;
+                addLog(`🍽️ Ăn ${["Siêu TK", "TK", "Bình thường", "Tốt"][selectedFood]}: -${foodCost.toFixed(2)}tr`);
+                health += getFoodHealthEffect();
+            } else {
+                addLog(`🍽️ KHÔNG ĐỦ TIỀN ĂN! (cần ${foodCost.toFixed(2)}tr, chỉ có ${money.toFixed(2)}tr)`);
+                let oldLevel = selectedFood;
+                selectedFood = 0;
+                foodCost = getCurrentFoodCost();
+                addLog(`⚠️ Buộc xuống mức ĂN SIÊU TIẾT KIỆM (từ ${["Siêu TK", "TK", "Bình thường", "Tốt"][oldLevel]})`);
+                if (money >= foodCost) {
+                    money -= foodCost;
+                    addLog(`🍽️ Ăn Siêu TK: -${foodCost.toFixed(2)}tr`);
+                } else {
+                    addLog(`❌ NGAY CẢ SIÊU TK CŨNG KHÔNG ĐỦ! Đói hoàn toàn, mất 15% máu`);
+                    let hungryLoss = takePercentHealth(15);
+                    addLog(`💔 Đói: mất ${hungryLoss} máu (15% hiện tại)`);
+                    money = 0;
+                }
+                let penalty = takePercentHealth(10);
+                addLog(`💔 Penalty thiếu ăn: mất thêm ${penalty} máu (10% hiện tại)`);
+            }
+        } else addLog(`🍜 Được bao ăn: không mất tiền ăn tháng này!`);
+
+        health = Math.min(maxHealth, Math.max(0, health));
+
+        let totalRate = (currentInterestRate + debtPunishStack) / 100;
+        if (debtPrincipal > 0) {
+            let interest = debtPrincipal * totalRate;
+            accruedInterest += interest;
+            addLog(`🏦 Lãi vay: +${interest.toFixed(2)}tr (${(totalRate * 100).toFixed(1)}%/th) | Dồn: ${accruedInterest.toFixed(2)}tr`);
+        }
+
+        if (currentMonth % 6 === 0) {
+            let totalDue = debtPrincipal + accruedInterest;
+            if (totalDue > 0) {
+                addLog(`⚠️ KỲ TRẢ NỢ (6 tháng): cần ${totalDue.toFixed(2)}tr`);
+                if (money >= totalDue) {
+                    money -= totalDue;
+                    addLog(`✅ Trả nợ thành công! Còn ${money.toFixed(2)}tr`);
+                    debtPrincipal = 0;
+                    accruedInterest = 0;
+                } else {
+                    let penaltyPercent = 30;
+                    let loss = takePercentHealth(penaltyPercent);
+                    addLog(`💥 KHÔNG ĐỦ TIỀN! Debt Punishment: mất ${loss} máu (${penaltyPercent}%), lãi tăng 2%`);
+                    debtPunishStack += 2;
+                    addLog(`🔺 Lãi suất hiện tại: ${(currentInterestRate + debtPunishStack).toFixed(1)}%`);
+                }
+            }
+        }
+
+        health = Math.min(maxHealth, Math.max(0, health));
+        if (health <= 0) { gameOver(); return false; }
+        if (money < 0) money = 0;
+        addLog(`📌 Cuối tháng: Tiền ${money.toFixed(2)}tr | Máu ${Math.floor(health)}/${maxHealth} | Nợ: ${(debtPrincipal + accruedInterest).toFixed(2)}tr | TS ròng: ${getNetWorth().toFixed(2)}tr`);
+        updateUI();
+        return true;
+    }
+
+    function nextMonth() {
+        if (isGameOver || autoSkipRunning) return;
+        processMonth().then(alive => {
+            if (alive) { currentMonth++; updateUI(); addLog(`🌟 Tháng ${currentMonth}`); }
+        });
+    }
+
+    function gamble(type) {
+        if (isGameOver) return;
+        let bet = parseFloat(document.getElementById('betAmount').value);
+        if (isNaN(bet) || bet <= 0 || bet > money) { addLog(`Cược không hợp lệ`); return; }
+        let win = false, mult = 1;
+        if (type === 'risky') { win = Math.random() < 0.5; mult = win ? 2 : 0; }
+        else { win = Math.random() < 0.3; mult = win ? 3 : 0; }
+        let oldMoney = money;
+        let winAmount = 0, loseAmount = 0;
+        if (win) {
+            winAmount = bet * (mult - 1);
+            money += winAmount;
+        } else {
+            loseAmount = bet;
+            money -= loseAmount;
+        }
+        money = Math.max(0, money);
+        addLog(`🎲 ${type === 'risky' ? 'Risky (50% x2)' : 'Hell (30% x3)'}: ${win ? 'THẮNG' : 'THUA'} → ${oldMoney.toFixed(2)}tr → ${money.toFixed(2)}tr`);
+        addGambleRecord(bet, winAmount, loseAmount);
+        updateMaxNetWorth();
+        updateUI();
+    }
+
+    function takeLoan() { if (!isGameOver) { debtPrincipal += 10; money += 10; addLog(`🏧 Vay 10tr. Nợ gốc: ${debtPrincipal.toFixed(2)}tr`); updateUI(); } }
+    function repayNow() { let total = debtPrincipal + accruedInterest; if (total <= 0) addLog("Không nợ"); else if (money >= total) { money -= total; debtPrincipal = 0; accruedInterest = 0; addLog(`✅ Trả nợ ${total.toFixed(2)}tr`); updateUI(); } else addLog(`❌ Thiếu ${(total - money).toFixed(2)}tr`); }
+
+    function setFood(level) { if (!isGameOver) { selectedFood = level; document.querySelectorAll('.food-option').forEach((el, i) => i === level ? el.classList.add('food-active') : el.classList.remove('food-active')); updateUI(); addLog(`🍴 Chọn ${["Siêu TK", "TK", "Bình thường", "Tốt"][level]}`); } }
+
+    function gameOver() {
+        if (isGameOver) return;
+        isGameOver = true;
+        let survived = currentMonth - 1;
+        addLog(`💀 GAME OVER. Sống ${survived} tháng.`);
+        updateHighScore(survived);
+        updateUI();
+    }
+
+    function applyConfigAndReset() {
+        dynamicConfig.salary = parseFloat(document.getElementById('cfgSalary').value) || 15;
+        let foodStr = document.getElementById('cfgFoodCosts').value;
+        let healthStr = document.getElementById('cfgHealthEffects').value;
+        let foodArr = foodStr.split(',').map(v => parseFloat(v.trim()));
+        let healthArr = healthStr.split(',').map(v => parseInt(v.trim()));
+        if (foodArr.length === 4 && foodArr.every(v => !isNaN(v))) dynamicConfig.foodCosts = foodArr;
+        if (healthArr.length === 4 && healthArr.every(v => !isNaN(v))) dynamicConfig.foodHealth = healthArr;
+        dynamicConfig.inflation = parseFloat(document.getElementById('cfgInflation').value) || 1.5;
+        dynamicConfig.baseInterest = parseFloat(document.getElementById('cfgLoanRate').value) || 1.0;
+        dynamicConfig.startMoney = parseFloat(document.getElementById('cfgStartMoney').value) || 20;
+        dynamicConfig.startDebt = parseFloat(document.getElementById('cfgStartDebt').value) || 80;
+        dynamicConfig.startHealth = parseFloat(document.getElementById('cfgStartHealth').value) || 100;
+        currentInterestRate = dynamicConfig.baseInterest;
+        resetGame();
+    }
+
+    function resetGame() {
+        isGameOver = false;
+        autoSkipRunning = false;
+        currentMonth = 1;
+        money = dynamicConfig.startMoney;
+        health = dynamicConfig.startHealth;
+        maxHealth = dynamicConfig.startHealth;
+        debtPrincipal = dynamicConfig.startDebt;
+        accruedInterest = 0;
+        selectedFood = 2;
+        debtPunishStack = 0;
+        currentInterestRate = Math.max(0.5, dynamicConfig.baseInterest);
+        logPanel.innerHTML = '';
+        addLog(`🔄 RESET GAME với cấu hình: Lương ${dynamicConfig.salary}tr, Lạm phát ${dynamicConfig.inflation}%, Lãi ${currentInterestRate.toFixed(1)}%`);
+        updateUI();
+        document.querySelectorAll('.food-option').forEach((el, i) => i === 2 ? el.classList.add('food-active') : el.classList.remove('food-active'));
+        updateMaxNetWorth();
+    }
+
+    async function autoSkip() {
+        if (isGameOver) resetGame();
+        autoSkipRunning = true;
+        addLog(`⚡ AUTO SKIP BẮT ĐẦU...`);
+        while (!isGameOver && health > 0) {
+            let alive = await processMonth();
+            if (!alive) break;
+            currentMonth++;
+            updateUI();
+            await new Promise(r => setTimeout(r, 6));
+            if (!autoSkipRunning) break;
+        }
+        autoSkipRunning = false;
+        addLog(`🏁 Kết thúc auto. Sống ${currentMonth - 1} tháng.`);
+        gameOver();
+    }
+
+    // Toggle config panel (mặc định ẩn)
+    let configHidden = true;
+    document.getElementById('toggleConfigBtn').onclick = () => {
+        const panel = document.getElementById('configPanel');
+        configHidden = !configHidden;
+        panel.classList.toggle('hidden', configHidden);
+    };
+    document.getElementById('resetStatsBtn').onclick = () => { if(confirm('Xóa toàn bộ thống kê?')) resetStats(); };
+
+    // Events
+    document.getElementById('gambleRisky').onclick = () => gamble('risky');
+    document.getElementById('gambleHell').onclick = () => gamble('hell');
+    document.getElementById('takeLoanBtn').onclick = takeLoan;
+    document.getElementById('repayNowBtn').onclick = repayNow;
+    document.getElementById('nextMonthBtn').onclick = () => { if (!autoSkipRunning) nextMonth(); };
+    document.getElementById('autoSkipBtn').onclick = autoSkip;
+    document.getElementById('resetGameBtn').onclick = resetGame;
+    document.getElementById('applyConfigBtn').onclick = applyConfigAndReset;
+    document.querySelectorAll('.food-option').forEach((btn, idx) => btn.onclick = () => setFood(idx));
+
+    // Khởi tạo
+    loadStats();
+    resetGame();
+</script>
+</body>
+</html>

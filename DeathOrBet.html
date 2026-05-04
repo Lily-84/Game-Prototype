@@ -348,6 +348,7 @@
     </div>
 
     <div class="stats-panel">
+        <div class="stat-card">🤑 Lương mỗi tháng: <span id="salary">10</span> trđ</div>
         <div class="stat-card">💰 Tiền mặt: <span id="moneyDisplay">0</span> trđ</div>
         <div class="stat-card">❤️ <span id="healthDisplay">100</span>/<span id="maxHealthDisplay">100</span>
             <div class="health-bar-bg"><div class="health-fill" id="healthFill" style="width:100%"></div></div>
@@ -490,6 +491,7 @@
 
     // DOM
     const moneySpan = document.getElementById('moneyDisplay');
+    const salarySpan = document.getElementById('salary');
     const healthSpan = document.getElementById('healthDisplay');
     const maxHealthSpan = document.getElementById('maxHealthDisplay');
     const monthSpan = document.getElementById('monthDisplay');
@@ -504,6 +506,7 @@
     const foodEffSpans = [document.getElementById('foodEff0'), document.getElementById('foodEff1'), document.getElementById('foodEff2'), document.getElementById('foodEff3')];
 
     function updateUI() {
+        salarySpan.textContent = dynamicConfig.salary;
         moneySpan.textContent = money.toFixed(2);
         healthSpan.textContent = Math.floor(health);
         maxHealthSpan.textContent = maxHealth;

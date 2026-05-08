@@ -779,7 +779,7 @@
         dynamicConfig.inflation = parseFloat(document.getElementById('cfgInflation').value) || 1.5;
         dynamicConfig.baseInterest = parseFloat(document.getElementById('cfgLoanRate').value) || 1.0;
         dynamicConfig.startMoney = parseFloat(document.getElementById('cfgStartMoney').value) || 20;
-        dynamicConfig.startDebt = parseFloat(document.getElementById('cfgStartDebt').value) || 80;
+        dynamicConfig.startDebt = parseFloat(document.getElementById('cfgStartDebt').value) || 0;
         dynamicConfig.startHealth = parseFloat(document.getElementById('cfgStartHealth').value) || 100;
         currentInterestRate = dynamicConfig.baseInterest;
         resetGame();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FlashCard - Language Learning</title>
+    <title>FlashCard</title>
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -1131,6 +1131,7 @@
                 moveDown: '⬇',
                 exportSuccess: 'Exported {count} cards successfully.',
                 exportFail: 'No cards to export.',
+                addNewCardSet: '+ Add new set',
             },
             vi: {
                 appName: 'FlashCard',
@@ -1212,6 +1213,7 @@
                 moveDown: '⬇',
                 exportSuccess: 'Đã xuất {count} thẻ thành công.',
                 exportFail: 'Không có thẻ nào để xuất.',
+                addNewCardSet: '+ Thêm bộ thẻ',
             }
         };
 
@@ -1379,6 +1381,7 @@
                 container.innerHTML = renderStudy();
                 attachStudyEvents();
             }
+            document.getElementById('btnCreateSet').innerHTML = t('addNewCardSet');
         }
 
         // ============================================================

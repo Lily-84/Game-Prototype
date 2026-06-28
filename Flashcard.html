@@ -394,61 +394,65 @@
             align-items: center;
         }
 
-        /* ===== TABLE ===== */
-        .table-wrap {
-            overflow-x: auto;
-            margin-top: 12px;
+        /* ===== WORD GRID (thay thế table) ===== */
+        .word-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 16px;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            color: #d0d0e0;
+
+        .word-item {
+            background: #16162a;
+            border: 1px solid #2d2d44;
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: grid;
+            grid-template-columns: 40px 1.2fr 1.2fr 1.5fr 1.5fr 140px;
+            gap: 12px;
+            align-items: center;
+            transition: all 0.2s;
         }
-        th {
-            text-align: left;
-            padding: 12px 14px;
-            background: #12121c;
-            font-weight: 600;
-            color: #b0b0d0;
-            border-bottom: 2px solid #2d2d44;
-            white-space: nowrap;
+        .word-item:hover {
+            border-color: #4a4a6a;
+            background: #1a1a32;
         }
-        td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #2d2d44;
-            vertical-align: middle;
+
+        .word-item .col-fav {
+            text-align: center;
         }
-        td .word-cell {
-            font-weight: 600;
-            color: #f0f0ff;
-        }
-        td .example-cell {
-            color: #a0a0c0;
-            font-size: 13px;
-            font-style: italic;
-        }
-        td .empty-cell {
-            color: #666688;
-            font-style: italic;
-            font-size: 12px;
-        }
-        .cell-with-speak {
+        .word-item .col-word,
+        .word-item .col-meaning,
+        .word-item .col-example,
+        .word-item .col-example-trans {
             display: flex;
             align-items: center;
             gap: 6px;
+            min-width: 0;
         }
-        .cell-with-speak .text-content {
-            word-break: break-word;
+        .word-item .col-word .text-content,
+        .word-item .col-meaning .text-content,
+        .word-item .col-example .text-content,
+        .word-item .col-example-trans .text-content {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .table-actions {
+        .word-item .col-example .text-content,
+        .word-item .col-example-trans .text-content {
+            color: #a0a0c0;
+            font-style: italic;
+        }
+        .word-item .col-actions {
             display: flex;
             gap: 4px;
             flex-wrap: wrap;
             align-items: center;
+            justify-content: flex-end;
         }
-        .table-actions .btn {
-            padding: 2px 6px;
+        .word-item .empty-cell {
+            color: #666688;
+            font-style: italic;
             font-size: 12px;
         }
 
@@ -831,6 +835,37 @@
             appearance: auto;
         }
 
+        /* ===== FILE DROP ZONE ===== */
+        .drop-zone {
+            border: 2px dashed #2d2d44;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            background: #12121c;
+            cursor: pointer;
+        }
+        .drop-zone:hover {
+            border-color: #4a4a6a;
+            background: #1a1a2e;
+        }
+        .drop-zone.dragover {
+            border-color: #7c7cf8;
+            background: #1a1a3a;
+            box-shadow: 0 0 20px rgba(124, 124, 248, 0.1);
+        }
+        .drop-zone .icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+        .drop-zone p {
+            color: #8888a8;
+            font-size: 14px;
+        }
+        .drop-zone .btn {
+            margin-top: 12px;
+        }
+
         /* ===== TOAST ===== */
         .toast-container {
             position: fixed;
@@ -912,6 +947,35 @@
         }
 
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .word-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                padding: 16px;
+            }
+            .word-item .col-fav {
+                text-align: left;
+                grid-row: 1;
+            }
+            .word-item .col-word {
+                grid-row: 2;
+            }
+            .word-item .col-meaning {
+                grid-row: 3;
+            }
+            .word-item .col-example {
+                grid-row: 4;
+            }
+            .word-item .col-example-trans {
+                grid-row: 5;
+            }
+            .word-item .col-actions {
+                grid-row: 6;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+        }
+
         @media (max-width: 700px) {
             .app-header {
                 padding: 14px 18px;
@@ -950,13 +1014,6 @@
             .set-card .actions {
                 flex-wrap: wrap;
             }
-            .table-wrap {
-                font-size: 13px;
-            }
-            th,
-            td {
-                padding: 8px 10px;
-            }
             .flashcard-face {
                 min-height: 200px;
                 padding: 20px 16px;
@@ -976,15 +1033,6 @@
                 min-width: 70px;
                 padding: 6px 14px;
                 font-size: 13px;
-            }
-            .table-actions .btn {
-                font-size: 11px;
-                padding: 2px 6px;
-            }
-            .cell-with-speak .btn-speak {
-                font-size: 11px;
-                width: 18px;
-                height: 18px;
             }
         }
         @media (max-width: 480px) {
@@ -1026,6 +1074,8 @@
             </div>
             <div class="header-actions">
                 <button class="btn btn-toggle" id="langToggle" onclick="toggleLanguage()">🇻🇳 Tiếng Việt</button>
+                <button class="btn btn-secondary" onclick="exportAllData()">📤 Xuất toàn bộ</button>
+                <button class="btn btn-secondary" onclick="openImportAllModal()">📥 Nhập toàn bộ</button>
                 <button class="btn btn-primary" id="btnCreateSet" onclick="openCreateSetModal()">+ Tạo bộ thẻ</button>
             </div>
         </header>
@@ -1122,7 +1172,7 @@
                 confirmExit: 'Are you sure you want to exit current study session?',
                 speak: '🔊',
                 deleteSet: 'Delete Set',
-                favorite: '⭐ Favorite',
+                favorite: '⭐',
                 onlyFavorites: 'Only favorites',
                 noFavorites: 'No favorite cards in this set.',
                 editCard: '✏️ Edit Card',
@@ -1132,6 +1182,14 @@
                 exportSuccess: 'Exported {count} cards successfully.',
                 exportFail: 'No cards to export.',
                 addNewCardSet: '+ Add new set',
+                importAll: '📥 Import All Data',
+                exportAll: '📤 Export All Data',
+                importAllDesc: 'Import all sets and cards from a JSON file',
+                exportAllDesc: 'Export all sets and cards to a JSON file',
+                dropOrClick: 'Drop your JSON file here or click to select',
+                importSuccess: 'Imported {count} sets successfully!',
+                importFail: 'Invalid data format. Please check your JSON file.',
+                chooseFile: 'Choose File',
             },
             vi: {
                 appName: 'FlashCard',
@@ -1204,7 +1262,7 @@
                 confirmExit: 'Bạn có chắc muốn thoát phiên ôn hiện tại?',
                 speak: '🔊',
                 deleteSet: 'Xóa bộ thẻ',
-                favorite: '⭐ Yêu thích',
+                favorite: '⭐',
                 onlyFavorites: 'Chỉ từ yêu thích',
                 noFavorites: 'Không có thẻ yêu thích nào trong bộ này.',
                 editCard: '✏️ Sửa thẻ',
@@ -1214,6 +1272,14 @@
                 exportSuccess: 'Đã xuất {count} thẻ thành công.',
                 exportFail: 'Không có thẻ nào để xuất.',
                 addNewCardSet: '+ Thêm bộ thẻ',
+                importAll: '📥 Nhập toàn bộ',
+                exportAll: '📤 Xuất toàn bộ',
+                importAllDesc: 'Nhập tất cả bộ thẻ và thẻ từ file JSON',
+                exportAllDesc: 'Xuất tất cả bộ thẻ và thẻ ra file JSON',
+                dropOrClick: 'Thả file JSON vào đây hoặc nhấn để chọn',
+                importSuccess: 'Đã nhập {count} bộ thẻ thành công!',
+                importFail: 'Dữ liệu không hợp lệ. Vui lòng kiểm tra file JSON.',
+                chooseFile: 'Chọn file',
             }
         };
 
@@ -1245,7 +1311,6 @@
                 if (!raw) return getDefaultData();
                 const data = JSON.parse(raw);
                 if (!data.sets || !Array.isArray(data.sets)) return getDefaultData();
-                // ensure each card has favorite field
                 for (const set of data.sets) {
                     if (set.cards) {
                         for (const card of set.cards) {
@@ -1363,6 +1428,128 @@
         }
 
         // ============================================================
+        //  EXPORT ALL DATA
+        // ============================================================
+        function exportAllData() {
+            const data = loadData();
+            if (data.sets.length === 0) {
+                showToast('No data to export.', 'error');
+                return;
+            }
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `flashcard_data_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showToast(`Exported ${data.sets.length} sets.`, 'success');
+        }
+
+        // ============================================================
+        //  IMPORT ALL DATA
+        // ============================================================
+        function openImportAllModal() {
+            openModal(`
+                <div class="modal-header">
+                    <h2>${t('importAll')}</h2>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label>${t('importAllDesc')}</label>
+                    <div class="drop-zone" id="importDropZone">
+                        <div class="icon">📂</div>
+                        <p>${t('dropOrClick')}</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('importFileInput').click()">${t('chooseFile')}</button>
+                        <input type="file" id="importFileInput" accept=".json" style="display:none" />
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+                </div>
+            `);
+
+            // Setup drag and drop
+            const dropZone = document.getElementById('importDropZone');
+            const fileInput = document.getElementById('importFileInput');
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleImportFile(files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (fileInput.files.length > 0) {
+                    handleImportFile(fileInput.files[0]);
+                }
+            });
+        }
+
+        function handleImportFile(file) {
+            if (!file.name.endsWith('.json')) {
+                showToast('Please select a JSON file.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!data.sets || !Array.isArray(data.sets)) {
+                        showToast(t('importFail'), 'error');
+                        return;
+                    }
+                    // Validate data structure
+                    let valid = true;
+                    for (const set of data.sets) {
+                        if (!set.id || !set.name || !set.sourceLang || !set.targetLang) {
+                            valid = false;
+                            break;
+                        }
+                        if (set.cards && Array.isArray(set.cards)) {
+                            for (const card of set.cards) {
+                                if (!card.id || !card.word || !card.meaning) {
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!valid) break;
+                    }
+                    if (!valid) {
+                        showToast(t('importFail'), 'error');
+                        return;
+                    }
+                    // Save data
+                    saveData(data);
+                    closeModal();
+                    showToast(t('importSuccess').replace('{count}', data.sets.length), 'success');
+                    render();
+                } catch (err) {
+                    showToast(t('importFail'), 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ============================================================
         //  RENDER ENGINE
         // ============================================================
         let currentView = 'dashboard';
@@ -1413,7 +1600,7 @@
                             <span>→</span>
                             <span>${escapeHtml(getLanguageLabel(set.targetLang))}</span>
                         </div>
-                        <div class="card-count">${count} ${t('remainingCards')}}</div>
+                        <div class="card-count">${count} ${t('remainingCards')}</div>
                         <div class="actions">
                             <button class="btn btn-primary btn-sm" onclick="viewSet('${set.id}')">${t('view')}</button>
                             <button class="btn btn-success btn-sm" onclick="startStudy('${set.id}')">${t('study')}</button>
@@ -1443,53 +1630,55 @@
             const sourceLangCode = getLangCode(set.sourceLang);
             const targetLangCode = getLangCode(set.targetLang);
 
-            let tableRows = '';
+            let gridItems = '';
             if (cards.length === 0) {
-                tableRows =
-                    `<tr><td colspan="7" style="text-align:center;color:#666688;padding:30px 0;">${t('noCards')}</td></tr>`;
+                gridItems = `<div style="text-align:center;color:#666688;padding:30px 0;">${t('noCards')}</div>`;
             } else {
                 for (let i = 0; i < cards.length; i++) {
                     const card = cards[i];
-                    const ex = card.example ? escapeHtml(card.example) : '<span class="empty-cell">(empty)</span>';
-                    const exTrans = card.exampleTranslation ? escapeHtml(card.exampleTranslation) :
-                        '<span class="empty-cell">(empty)</span>';
                     const fav = card.favorite ? 'active' : '';
                     const favIcon = card.favorite ? '⭐' : '☆';
                     const isFirst = i === 0;
                     const isLast = i === cards.length - 1;
 
-                    // Helper to create cell with speak button
                     const cellWithSpeak = (text, langCode, isEmpty = false) => {
                         if (isEmpty || !text || text.trim() === '') {
                             return `<span class="empty-cell">(empty)</span>`;
                         }
                         return `
-                            <div class="cell-with-speak">
-                                <span class="text-content">${escapeHtml(text)}</span>
-                                <button class="btn-speak btn-speak-sm" onclick="event.stopPropagation(); speakText('${escapeHtml(text)}', '${langCode}')" title="${t('speak')}">🔊</button>
-                            </div>
+                            <span class="text-content">${escapeHtml(text)}</span>
+                            <button class="btn-speak btn-speak-sm" onclick="event.stopPropagation(); speakText('${escapeHtml(text)}', '${langCode}')" title="${t('speak')}">🔊</button>
                         `;
                     };
 
-                    tableRows += `
-                        <tr>
-                            <td><button class="btn-fav ${fav}" onclick="toggleFavorite('${setId}','${card.id}')">${favIcon}</button></td>
-                            <td>${cellWithSpeak(card.word, sourceLangCode)}</td>
-                            <td>${cellWithSpeak(card.meaning, targetLangCode)}</td>
-                            <td>${cellWithSpeak(card.example, sourceLangCode, !card.example)}</td>
-                            <td>${cellWithSpeak(card.exampleTranslation, targetLangCode, !card.exampleTranslation)}</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="btn-move" onclick="moveCard('${setId}','${card.id}',-1)" ${isFirst ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : ''} title="${t('moveUp')}">⬆</button>
-                                    <button class="btn-move" onclick="moveCard('${setId}','${card.id}',1)" ${isLast ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : ''} title="${t('moveDown')}">⬇</button>
-                                    <button class="btn btn-secondary btn-xs" onclick="openEditCardModal('${setId}','${card.id}')">${t('edit')}</button>
-                                    <button class="btn btn-danger btn-xs" onclick="deleteCard('${setId}','${card.id}')">${t('delete')}</button>
-                                </div>
-                            </td>
-                        </tr>
+                    gridItems += `
+                        <div class="word-item">
+                            <div class="col-fav">
+                                <button class="btn-fav ${fav}" onclick="toggleFavorite('${setId}','${card.id}')">${favIcon}</button>
+                            </div>
+                            <div class="col-word">
+                                ${cellWithSpeak(card.word, sourceLangCode)}
+                            </div>
+                            <div class="col-meaning">
+                                ${cellWithSpeak(card.meaning, targetLangCode)}
+                            </div>
+                            <div class="col-example">
+                                ${cellWithSpeak(card.example, sourceLangCode, !card.example)}
+                            </div>
+                            <div class="col-example-trans">
+                                ${cellWithSpeak(card.exampleTranslation, targetLangCode, !card.exampleTranslation)}
+                            </div>
+                            <div class="col-actions">
+                                <button class="btn-move" onclick="moveCard('${setId}','${card.id}',-1)" ${isFirst ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : ''} title="${t('moveUp')}">⬆</button>
+                                <button class="btn-move" onclick="moveCard('${setId}','${card.id}',1)" ${isLast ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : ''} title="${t('moveDown')}">⬇</button>
+                                <button class="btn btn-secondary btn-xs" onclick="openEditCardModal('${setId}','${card.id}')">${t('edit')}</button>
+                                <button class="btn btn-danger btn-xs" onclick="deleteCard('${setId}','${card.id}')">${t('delete')}</button>
+                            </div>
+                        </div>
                     `;
                 }
             }
+
             return `
                 <div class="card">
                     <div class="detail-header">
@@ -1501,26 +1690,12 @@
                         </div>
                         <div class="detail-actions">
                             <button class="btn btn-success" onclick="startStudy('${setId}')">${t('study')}</button>
-                            <button class="btn btn-secondary" onclick="openImportModal('${setId}')">${t('importCSV')}</button>
+                            <button class="btn btn-secondary" onclick="openImportCSVModal('${setId}')">${t('importCSV')}</button>
                             <button class="btn btn-secondary" onclick="exportCSV('${setId}')">${t('exportCSV')}</button>
                             <button class="btn btn-primary" onclick="openAddCardModal('${setId}')">${t('addCard')}</button>
                         </div>
                     </div>
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width:40px;">${t('favorite')}</th>
-                                    <th>${t('word')}</th>
-                                    <th>${t('meaning')}</th>
-                                    <th>${t('example')}</th>
-                                    <th>${t('exampleTrans')}</th>
-                                    <th style="width:140px;">${t('edit')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>${tableRows}</tbody>
-                        </table>
-                    </div>
+                    <div class="word-grid">${gridItems}</div>
                     <div class="add-card-form" id="inlineAddForm">
                         <div class="form-row">
                             <label>${t('word')}</label>
@@ -1569,7 +1744,6 @@
                 meaningFirst
             } = studyState;
 
-            // Final summary
             if (finished) {
                 const totalLearned = learnedStatus.filter(v => v === true).length;
                 const totalNotLearned = learnedStatus.filter(v => v === false).length;
@@ -1608,7 +1782,6 @@
             const batchLearned = learnedStatus.slice(start, end);
             const allMarked = batchLearned.every(v => v !== undefined);
 
-            // Batch summary
             if (allMarked && currentBatch < totalBatches) {
                 const learnedInBatch = batchLearned.filter(v => v === true).length;
                 const notLearnedInBatch = batchLearned.filter(v => v === false).length;
@@ -1643,7 +1816,6 @@
                 `;
             }
 
-            // Show flashcard
             const currentIndexInBatch = studyState.currentIndexInBatch || 0;
             const card = batchCards[currentIndexInBatch];
             if (!card) {
@@ -1653,7 +1825,6 @@
             const isFlipped = flipped || false;
             const progress = ((currentBatch * batchSize + currentIndexInBatch + 1) / allCards.length * 100).toFixed(0);
 
-            // Determine front/back labels and content
             let frontLabel, backLabel, frontMain, backMain, frontSpeakCode, backSpeakCode;
             if (meaningFirst) {
                 frontLabel = t('frontLabelMeaning');
@@ -1671,13 +1842,11 @@
                 backSpeakCode = getTargetLangCode(setId);
             }
 
-            // Example and translation
             const exampleText = card.example || '';
             const exampleTransText = card.exampleTranslation || '';
             const exampleSpeakCode = getLangCodeForSet(setId);
             const exampleTransSpeakCode = getTargetLangCode(setId);
 
-            // Build example HTML (shared for both faces)
             const exampleHtml = `
                 <div class="example-area ${showExample ? 'show' : ''}">
                     ${exampleText ? `<div class="ex-text">📝 ${escapeHtml(exampleText)} <button class="btn-speak" onclick="event.stopPropagation(); speakText('${escapeHtml(exampleText)}', '${exampleSpeakCode}')" title="${t('speak')}">${t('speak')}</button></div>` : ''}
@@ -1711,7 +1880,6 @@
                 <div class="hint">${t('flipHint')}</div>
             `;
 
-            // Progress dots
             let dots = '';
             for (let i = 0; i < allCards.length; i++) {
                 let cls = 'dot';
@@ -1730,7 +1898,6 @@
                     <button class="btn btn-secondary btn-sm" onclick="unmarkCard()">${t('unmark')}</button>
                 `;
             } else {
-                // Đổi vị trí: Not Learned trước, Learned sau
                 markButtons = `
                     <button class="btn btn-danger btn-sm" onclick="markCard(false)">${t('markNotLearned')}</button>
                     <button class="btn btn-success btn-sm" onclick="markCard(true)">${t('markLearned')}</button>
@@ -2094,7 +2261,6 @@
             if (idx === -1) return;
             const newIdx = idx + direction;
             if (newIdx < 0 || newIdx >= set.cards.length) return;
-            // Swap
             const temp = set.cards[idx];
             set.cards[idx] = set.cards[newIdx];
             set.cards[newIdx] = temp;
@@ -2118,7 +2284,6 @@
                 return;
             }
 
-            // Build CSV content without header
             let csvContent = '';
             for (const card of cards) {
                 const word = escapeCsvField(card.word);
@@ -2128,7 +2293,6 @@
                 csvContent += `${word},${meaning},${example},${exampleTrans}\n`;
             }
 
-            // Create blob and download
             const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
@@ -2149,6 +2313,156 @@
                 return `"${str.replace(/"/g, '""')}"`;
             }
             return str;
+        }
+
+        // ============================================================
+        //  IMPORT CSV (with drag and drop)
+        // ============================================================
+        function openImportCSVModal(setId) {
+            openModal(`
+                <div class="modal-header">
+                    <h2>${t('importCSV')}</h2>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label>${t('importCSV')}</label>
+                    <div class="drop-zone" id="csvDropZone">
+                        <div class="icon">📄</div>
+                        <p>${t('dropOrClick')}</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('csvFileInput').click()">${t('chooseFile')}</button>
+                        <input type="file" id="csvFileInput" accept=".csv,.txt" style="display:none" />
+                    </div>
+                    <div class="hint" style="margin-top:12px;">${t('csvHint')}</div>
+                </div>
+                <div class="form-group">
+                    <label>Hoặc nhập trực tiếp</label>
+                    <textarea id="modalCsvInput" placeholder="${t('csvPlaceholder')}" style="min-height:150px;"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
+                    <button class="btn btn-primary" onclick="handleImportCsv('${setId}')">${t('import')}</button>
+                </div>
+            `);
+
+            // Setup drag and drop for CSV
+            const dropZone = document.getElementById('csvDropZone');
+            const fileInput = document.getElementById('csvFileInput');
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleCSVFile(files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (fileInput.files.length > 0) {
+                    handleCSVFile(fileInput.files[0]);
+                }
+            });
+        }
+
+        function handleCSVFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const textarea = document.getElementById('modalCsvInput');
+                if (textarea) {
+                    textarea.value = e.target.result;
+                    showToast('File loaded successfully!', 'success');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function handleImportCsv(setId) {
+            const raw = document.getElementById('modalCsvInput').value;
+            if (!raw.trim()) {
+                showToast('Please enter CSV data or upload a file.', 'error');
+                return;
+            }
+
+            const lines = raw.split('\n').filter(line => line.trim() !== '');
+            let added = 0;
+            let errors = 0;
+            const data = loadData();
+            const set = data.sets.find(s => s.id === setId);
+            if (!set) {
+                showToast('Set not found.', 'error');
+                return;
+            }
+
+            for (const line of lines) {
+                const parts = parseCSVLine(line);
+                if (parts.length < 2) {
+                    errors++;
+                    continue;
+                }
+                const word = parts[0].trim();
+                const meaning = parts[1].trim();
+                if (!word || !meaning) {
+                    errors++;
+                    continue;
+                }
+                const example = parts[2] ? parts[2].trim() : '';
+                const exampleTranslation = parts[3] ? parts[3].trim() : '';
+
+                set.cards.push({
+                    id: generateId(),
+                    word,
+                    meaning,
+                    example,
+                    exampleTranslation,
+                    favorite: false
+                });
+                added++;
+            }
+
+            saveData(data);
+            closeModal();
+            showToast(`Imported ${added} cards. ${errors > 0 ? errors + ' lines skipped.' : ''}`, 'success');
+            render();
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (inQuotes) {
+                    if (ch === '"' && line[i + 1] === '"') {
+                        current += '"';
+                        i++;
+                    } else if (ch === '"') {
+                        inQuotes = false;
+                    } else {
+                        current += ch;
+                    }
+                } else {
+                    if (ch === '"') {
+                        inQuotes = true;
+                    } else if (ch === ',') {
+                        result.push(current);
+                        current = '';
+                    } else {
+                        current += ch;
+                    }
+                }
+            }
+            result.push(current);
+            return result;
         }
 
         // ============================================================
@@ -2454,110 +2768,6 @@
         }
 
         // ============================================================
-        //  IMPORT CSV
-        // ============================================================
-        function openImportModal(setId) {
-            openModal(`
-                <div class="modal-header">
-                    <h2>${t('importCSV')}</h2>
-                    <button class="modal-close" onclick="closeModal()">&times;</button>
-                </div>
-                <div class="form-group">
-                    <label>CSV Data</label>
-                    <textarea id="modalCsvInput" placeholder="${t('csvPlaceholder')}"></textarea>
-                    <div class="hint">${t('csvHint')}</div>
-                </div>
-                <div class="modal-actions">
-                    <button class="btn btn-secondary" onclick="closeModal()">${t('cancel')}</button>
-                    <button class="btn btn-primary" onclick="handleImportCsv('${setId}')">${t('import')}</button>
-                </div>
-            `);
-            setTimeout(() => {
-                const el = document.getElementById('modalCsvInput');
-                if (el) el.focus();
-            }, 100);
-        }
-
-        function handleImportCsv(setId) {
-            const raw = document.getElementById('modalCsvInput').value;
-            if (!raw.trim()) {
-                showToast('Please enter CSV data.', 'error');
-                return;
-            }
-
-            const lines = raw.split('\n').filter(line => line.trim() !== '');
-            let added = 0;
-            let errors = 0;
-            const data = loadData();
-            const set = data.sets.find(s => s.id === setId);
-            if (!set) {
-                showToast('Set not found.', 'error');
-                return;
-            }
-
-            for (const line of lines) {
-                const parts = parseCSVLine(line);
-                if (parts.length < 2) {
-                    errors++;
-                    continue;
-                }
-                const word = parts[0].trim();
-                const meaning = parts[1].trim();
-                if (!word || !meaning) {
-                    errors++;
-                    continue;
-                }
-                const example = parts[2] ? parts[2].trim() : '';
-                const exampleTranslation = parts[3] ? parts[3].trim() : '';
-
-                set.cards.push({
-                    id: generateId(),
-                    word,
-                    meaning,
-                    example,
-                    exampleTranslation,
-                    favorite: false
-                });
-                added++;
-            }
-
-            saveData(data);
-            closeModal();
-            showToast(`Imported ${added} cards. ${errors > 0 ? errors + ' lines skipped.' : ''}`, 'success');
-            render();
-        }
-
-        function parseCSVLine(line) {
-            const result = [];
-            let current = '';
-            let inQuotes = false;
-            for (let i = 0; i < line.length; i++) {
-                const ch = line[i];
-                if (inQuotes) {
-                    if (ch === '"' && line[i + 1] === '"') {
-                        current += '"';
-                        i++;
-                    } else if (ch === '"') {
-                        inQuotes = false;
-                    } else {
-                        current += ch;
-                    }
-                } else {
-                    if (ch === '"') {
-                        inQuotes = true;
-                    } else if (ch === ',') {
-                        result.push(current);
-                        current = '';
-                    } else {
-                        current += ch;
-                    }
-                }
-            }
-            result.push(current);
-            return result;
-        }
-
-        // ============================================================
         //  NAVIGATION
         // ============================================================
         function goDashboard() {
@@ -2595,7 +2805,8 @@
         window.openCreateSetModal = openCreateSetModal;
         window.openEditSetModal = openEditSetModal;
         window.openAddCardModal = openAddCardModal;
-        window.openImportModal = openImportModal;
+        window.openImportCSVModal = openImportCSVModal;
+        window.openImportAllModal = openImportAllModal;
         window.openEditCardModal = openEditCardModal;
         window.handleEditCard = handleEditCard;
         window.handleCreateSet = handleCreateSet;
@@ -2628,6 +2839,7 @@
         window.toggleFavorite = toggleFavorite;
         window.moveCard = moveCard;
         window.exportCSV = exportCSV;
+        window.exportAllData = exportAllData;
 
         // ============================================================
         //  INIT
